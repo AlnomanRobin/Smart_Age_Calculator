@@ -1,0 +1,1927 @@
+/* ==========================================================================
+   ChronoAge — Core Style & Component System
+   ========================================================================== */
+
+/* --- Reset & Global Defaults --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  background-image: var(--bg-radial), var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ambient Floating Glow Elements */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+  animation: floatOrb 20s ease-in-out infinite alternate;
+}
+
+.ambient-glow-1 {
+  width: 450px;
+  height: 450px;
+  top: -100px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+}
+
+.ambient-glow-2 {
+  width: 500px;
+  height: 500px;
+  bottom: 10%;
+  right: -120px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+  animation-delay: -7s;
+}
+
+.ambient-glow-3 {
+  width: 350px;
+  height: 350px;
+  top: 45%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+  animation-delay: -14s;
+}
+
+@keyframes floatOrb {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(40px, 30px) scale(1.08); }
+  100% { transform: translate(-30px, 50px) scale(0.95); }
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Typography Helpers */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+.gradient-text {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+/* Glassmorphism Foundation */
+.glass-card {
+  background: var(--surface-card);
+  backdrop-filter: var(--surface-backdrop-blur);
+  -webkit-backdrop-filter: var(--surface-backdrop-blur);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.glass-card:hover {
+  border-color: var(--surface-glass-border-focus);
+}
+
+/* ==========================================================================
+   Header & Navigation
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: var(--surface-backdrop-blur);
+  -webkit-backdrop-filter: var(--surface-backdrop-blur);
+  border-bottom: 1px solid var(--nav-border);
+  transition: all var(--transition-normal);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4.5rem;
+  padding: 0 1.5rem;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.45rem;
+  letter-spacing: -0.02em;
+}
+
+.logo-icon-wrapper {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 14px var(--accent-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+  animation: shineLogo 4s infinite linear;
+}
+
+@keyframes shineLogo {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  gap: 0.4rem;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--accent-primary);
+  background: var(--surface-subtle);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-primary);
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.05rem;
+  position: relative;
+  transition: all var(--transition-normal);
+  outline: none;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--surface-card-hover);
+  border-color: var(--accent-primary);
+  transform: rotate(15deg) scale(1.05);
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.theme-toggle-btn .sun-icon {
+  display: none;
+  color: var(--amber-400);
+}
+
+.theme-toggle-btn .moon-icon {
+  display: block;
+  color: var(--violet-500);
+}
+
+[data-theme="dark"] .theme-toggle-btn .sun-icon {
+  display: block;
+}
+
+[data-theme="dark"] .theme-toggle-btn .moon-icon {
+  display: none;
+}
+
+/* Profile & Action Buttons in Header */
+.btn-nav-action {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-primary);
+  height: 2.6rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-nav-action:hover {
+  background: var(--surface-card-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.badge-count {
+  background: var(--accent-gradient);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+/* Hamburger Menu Toggle (Mobile) */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+}
+
+/* ==========================================================================
+   Hero & Header Banner
+   ========================================================================== */
+.hero-section {
+  text-align: center;
+  padding: 3.5rem 1rem 2rem;
+  position: relative;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  border: 1px solid var(--badge-border);
+  padding: 0.35rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   Main Age Calculator Card
+   ========================================================================== */
+.calculator-section {
+  margin-bottom: 3.5rem;
+}
+
+.calc-card {
+  padding: 2.5rem;
+  background: var(--surface-card);
+}
+
+.calc-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.form-row-primary {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.input-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.input-label-hint {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 1.1rem;
+  color: var(--accent-primary);
+  font-size: 1.15rem;
+  pointer-events: none;
+}
+
+.input-date {
+  width: 100%;
+  height: 3.5rem;
+  padding: 0 3.2rem 0 3.2rem;
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--surface-input);
+  border: 1.5px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.input-date:hover {
+  border-color: var(--surface-glass-border-focus);
+}
+
+.input-date:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.input-clear-btn {
+  position: absolute;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  display: none;
+}
+
+.input-clear-btn.visible {
+  display: block;
+}
+
+.input-clear-btn:hover {
+  color: var(--rose-500);
+  background: var(--surface-subtle);
+}
+
+/* Quick Date Helpers */
+.quick-helpers {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: -0.5rem;
+}
+
+.quick-chip {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quick-chip:hover {
+  background: var(--badge-bg);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+/* Optional Advanced Inputs Toggle */
+.advanced-options-trigger {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--accent-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.25rem 0;
+  transition: opacity var(--transition-fast);
+}
+
+.advanced-options-trigger:hover {
+  text-decoration: underline;
+}
+
+.advanced-options-panel {
+  display: none;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--surface-glass-border);
+}
+
+.advanced-options-panel.open {
+  display: grid;
+  animation: fadeInDown 0.3s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Calculate Button */
+.btn-primary-calc {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border: none;
+  height: 3.5rem;
+  padding: 0 2rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  box-shadow: 0 8px 24px var(--accent-glow);
+  transition: all var(--transition-bounce);
+  white-space: nowrap;
+}
+
+.btn-primary-calc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px var(--accent-glow);
+  filter: brightness(1.08);
+}
+
+.btn-primary-calc:active {
+  transform: translateY(1px);
+}
+
+/* ==========================================================================
+   Results Hero Showcase
+   ========================================================================== */
+.results-container {
+  margin-top: 2.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--surface-glass-border);
+  animation: fadeInResults 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeInResults {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results-header-tag {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent-primary);
+  margin-bottom: 1.25rem;
+}
+
+/* Primary 3-Pillar Age Grid */
+.primary-age-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.age-hero-pillar {
+  background: var(--surface-card-solid);
+  border: 1.5px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.age-hero-pillar:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--accent-primary);
+}
+
+.pillar-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent-gradient);
+}
+
+.age-hero-value {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 6vw, 4.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.04em;
+}
+
+.age-hero-label {
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+/* Action Toolbar for Results */
+.results-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
+}
+
+.btn-tool {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-primary);
+  height: 2.6rem;
+  padding: 0 1.2rem;
+  border-radius: var(--radius-full);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-tool:hover {
+  background: var(--surface-card-hover);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+.btn-tool-save {
+  background: var(--badge-bg);
+  color: var(--accent-primary);
+  border-color: var(--badge-border);
+}
+
+/* Secondary Units Breakdown (Months, Weeks, Days, Hours, Mins, Secs) */
+.breakdown-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+}
+
+.breakdown-card {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.breakdown-card:hover {
+  background: var(--surface-card-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+}
+
+.breakdown-icon {
+  font-size: 1.25rem;
+  color: var(--accent-primary);
+  margin-bottom: 0.4rem;
+}
+
+.breakdown-value {
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.2rem;
+}
+
+.breakdown-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Real-time ticker badge */
+.ticker-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--emerald-500);
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  margin-top: 0.3rem;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--emerald-500);
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* ==========================================================================
+   Section Title & Header Standard
+   ========================================================================== */
+.section-wrapper {
+  margin-bottom: 4rem;
+  scroll-margin-top: 5.5rem;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 650px;
+  margin: 0 auto 2.5rem;
+}
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-primary);
+  background: var(--badge-bg);
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   A. Next Birthday Countdown
+   ========================================================================== */
+.countdown-banner-card {
+  padding: 2.75rem 2rem;
+  text-align: center;
+  background: var(--surface-card);
+}
+
+.countdown-top-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.bday-target-date {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bday-weekday-pill {
+  background: var(--accent-gradient-subtle);
+  color: var(--accent-primary);
+  border: 1px solid var(--surface-glass-border-focus);
+  padding: 0.3rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.countdown-digits-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  max-width: 760px;
+  margin: 0 auto 2rem;
+}
+
+.countdown-digit-block {
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 0.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
+
+.countdown-digit-block:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.countdown-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.03em;
+}
+
+.countdown-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Birthday Year Progress Bar */
+.countdown-progress-wrap {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.progress-track {
+  width: 100%;
+  height: 0.75rem;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  border: 1px solid var(--surface-glass-border);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent-gradient);
+  border-radius: var(--radius-full);
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  filter: blur(2px);
+  border-radius: var(--radius-full);
+}
+
+/* Birthday Celebration Mode */
+.birthday-today-card {
+  display: none;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+  border: 2px solid var(--amber-400);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  text-align: center;
+  margin-top: 1.5rem;
+  animation: bounceCelebrate 1s ease;
+}
+
+.birthday-today-card.active {
+  display: block;
+}
+
+@keyframes bounceCelebrate {
+  0% { transform: scale(0.9); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ==========================================================================
+   B. Cosmic Identity & Day of Birth
+   ========================================================================== */
+.cosmic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.cosmic-card {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cosmic-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.cosmic-icon {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: var(--radius-lg);
+  background: var(--accent-gradient-subtle);
+  border: 1px solid var(--surface-glass-border-focus);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--accent-primary);
+}
+
+.cosmic-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.15rem;
+}
+
+.cosmic-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.cosmic-body {
+  margin-bottom: 1.25rem;
+}
+
+.cosmic-highlight {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.cosmic-desc {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.cosmic-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.cosmic-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   C. Life Statistics & Biological Metrics
+   ========================================================================== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon-wrap {
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.stat-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+/* Life Journey Progress Bar Card */
+.life-expectancy-card {
+  padding: 2rem;
+}
+
+.life-exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.life-exp-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.life-exp-pct {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+}
+
+/* ==========================================================================
+   D. Fun Age Facts & Curiosities
+   ========================================================================== */
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.5rem;
+}
+
+.fact-card {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-normal);
+}
+
+.fact-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.fact-badge {
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-secondary);
+}
+
+.fact-icon-large {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.heart-pulsing {
+  color: var(--rose-500);
+  animation: heartPulse 1.2s infinite;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.2); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
+.fact-number {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+}
+
+.fact-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.fact-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.fact-disclaimer {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-style: italic;
+}
+
+/* ==========================================================================
+   E. Planetary Age (Our Solar System)
+   ========================================================================== */
+.planets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.planet-card {
+  padding: 1.75rem 1.5rem;
+  background: var(--planet-card-bg);
+  border: 1px solid var(--planet-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-bounce);
+}
+
+.planet-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-xl);
+}
+
+/* CSS Illustrated Planetary Spheres */
+.planet-sphere-wrap {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 1.25rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.planet-sphere {
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  box-shadow: inset -8px -8px 20px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 255, 255, 0.1);
+  position: relative;
+  transition: transform 0.5s ease;
+}
+
+.planet-card:hover .planet-sphere {
+  transform: scale(1.08) rotate(10deg);
+}
+
+/* Unique Planet Color Shaders */
+.sphere-mercury {
+  background: radial-gradient(circle at 30% 30%, #e2e8f0, #94a3b8 45%, #475569 85%, #1e293b 100%);
+  box-shadow: 0 0 15px rgba(148, 163, 184, 0.4);
+}
+
+.sphere-venus {
+  background: radial-gradient(circle at 30% 30%, #fef08a, #eab308 45%, #ca8a04 85%, #713f12 100%);
+  box-shadow: 0 0 20px rgba(234, 179, 8, 0.4);
+}
+
+.sphere-earth {
+  background: radial-gradient(circle at 30% 30%, #38bdf8, #2563eb 45%, #16a34a 65%, #1e3a8a 100%);
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.5);
+}
+
+.sphere-mars {
+  background: radial-gradient(circle at 30% 30%, #fca5a5, #ef4444 45%, #b91c1c 80%, #7f1d1d 100%);
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.45);
+}
+
+.sphere-jupiter {
+  background: repeating-linear-gradient(
+    180deg,
+    #fed7aa 0px,
+    #f97316 12px,
+    #ea580c 20px,
+    #ffedd5 30px,
+    #c2410c 45px,
+    #9a3412 60px
+  );
+  box-shadow: 0 0 25px rgba(249, 115, 22, 0.4);
+}
+
+.sphere-saturn {
+  background: radial-gradient(circle at 30% 30%, #fef08a, #d97706 50%, #92400e 100%);
+  box-shadow: 0 0 20px rgba(217, 119, 6, 0.4);
+}
+
+/* Saturn Rings */
+.saturn-ring {
+  position: absolute;
+  width: 110px;
+  height: 30px;
+  border: 5px solid rgba(245, 158, 11, 0.7);
+  border-top-color: rgba(245, 158, 11, 0.25);
+  border-radius: 50%;
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+
+.sphere-uranus {
+  background: radial-gradient(circle at 30% 30%, #a5f3fc, #22d3ee 45%, #0891b2 85%, #155e75 100%);
+  box-shadow: 0 0 22px rgba(34, 211, 238, 0.4);
+}
+
+.sphere-neptune {
+  background: radial-gradient(circle at 30% 30%, #93c5fd, #3b82f6 45%, #1d4ed8 85%, #1e1b4b 100%);
+  box-shadow: 0 0 22px rgba(59, 130, 246, 0.5);
+}
+
+.planet-name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.planet-orbit-info {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 0.85rem;
+}
+
+.planet-age-val {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.planet-age-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+}
+
+.planet-meta-badge {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  width: 100%;
+}
+
+/* ==========================================================================
+   F. Life Milestones
+   ========================================================================== */
+.milestones-card {
+  padding: 2.5rem;
+}
+
+.milestones-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  color: var(--text-secondary);
+  padding: 0.45rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--accent-gradient);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px var(--accent-glow);
+}
+
+.milestones-timeline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.25rem;
+}
+
+.milestone-item {
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.milestone-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.milestone-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 5px;
+}
+
+.milestone-item.achieved .milestone-status-bar {
+  background: var(--emerald-500);
+}
+
+.milestone-item.upcoming .milestone-status-bar {
+  background: var(--accent-primary);
+}
+
+.milestone-item.today .milestone-status-bar {
+  background: var(--amber-500);
+}
+
+.milestone-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.milestone-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.badge-achieved {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--emerald-500);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-upcoming {
+  background: var(--badge-bg);
+  color: var(--accent-primary);
+  border: 1px solid var(--badge-border);
+}
+
+.badge-today {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--amber-500);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.milestone-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.milestone-date {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.milestone-time-diff {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   G. Age Comparison
+   ========================================================================== */
+.comparison-card {
+  padding: 2.5rem;
+}
+
+.comparison-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.compare-person-box {
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+}
+
+.compare-person-header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.person-avatar-icon {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.avatar-p1 {
+  background: rgba(99, 102, 241, 0.2);
+  color: var(--primary-500);
+}
+
+.avatar-p2 {
+  background: rgba(236, 72, 153, 0.2);
+  color: var(--rose-500);
+}
+
+.input-text-name {
+  width: 100%;
+  height: 2.8rem;
+  padding: 0 1rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--surface-glass-border);
+  background: var(--surface-input);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+  outline: none;
+}
+
+.input-text-name:focus {
+  border-color: var(--accent-primary);
+}
+
+.compare-vs-badge {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+.comparison-results-panel {
+  display: none;
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--surface-glass-border-focus);
+  border-radius: var(--radius-xl);
+  padding: 2rem;
+  animation: fadeInDown 0.4s ease-out;
+}
+
+.comparison-results-panel.active {
+  display: block;
+}
+
+.compare-verdict-banner {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.compare-verdict-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.compare-diff-pills {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+}
+
+.compare-pill {
+  background: var(--surface-card-solid);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.compare-pill-num {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.compare-pill-lbl {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Modals & Drawers (Saved Profiles & Share)
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--surface-card-solid);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  transform: scale(0.95);
+  transition: transform var(--transition-normal);
+  padding: 2rem;
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--surface-glass-border);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  color: var(--text-primary);
+  background: var(--surface-subtle);
+}
+
+/* Profile Form & List */
+.profile-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.profiles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.profile-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  background: var(--surface-subtle);
+  border: 1px solid var(--surface-glass-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.profile-item-row:hover {
+  border-color: var(--accent-primary);
+  background: var(--surface-card-hover);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-tag-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--badge-bg);
+  color: var(--accent-primary);
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ==========================================================================
+   Toast Notification System
+   ========================================================================== */
+.toast-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  background: var(--surface-card-solid);
+  border: 1px solid var(--surface-glass-border-focus);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.4rem;
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 280px;
+  max-width: 420px;
+  animation: slideToastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.toast.toast-hiding {
+  animation: slideToastOut 0.25s ease forwards;
+}
+
+@keyframes slideToastIn {
+  from { opacity: 0; transform: translateX(40px) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes slideToastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(40px); }
+}
+
+.toast-icon {
+  font-size: 1.25rem;
+  color: var(--accent-primary);
+}
+
+.toast.toast-success .toast-icon {
+  color: var(--emerald-500);
+}
+
+.toast.toast-error .toast-icon {
+  color: var(--rose-500);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer {
+  margin-top: 5rem;
+  border-top: 1px solid var(--surface-glass-border);
+  padding: 3.5rem 1.5rem 2.5rem;
+  background: var(--surface-card);
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--accent-primary);
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Print Stylesheet (Executive Life Chronicle PDF Report)
+   ========================================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-size: 12pt;
+    padding: 0;
+  }
+
+  .ambient-glow,
+  .site-header,
+  .site-footer,
+  .quick-helpers,
+  .advanced-options-trigger,
+  .btn-primary-calc,
+  .results-toolbar,
+  .milestones-filter-bar,
+  .theme-toggle-btn,
+  .toast-container,
+  .modal-overlay,
+  .nav-menu,
+  .comparison-section {
+    display: none !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .glass-card,
+  .stat-card,
+  .planet-card,
+  .milestone-item {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .primary-age-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .age-hero-value {
+    color: #111827 !important;
+    font-size: 2.8rem !important;
+  }
+
+  .breakdown-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .planets-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .milestones-timeline-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  h1, h2, h3 {
+    color: #111827 !important;
+  }
+
+  .gradient-text {
+    -webkit-text-fill-color: #1e1b4b !important;
+    color: #1e1b4b !important;
+  }
+}
+

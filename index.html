@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChronoAge — Advanced Age Calculator & Life Statistics Web App</title>
+  <meta name="description" content="Calculate your exact age, next birthday countdown, life statistics, planetary age, and milestones with ChronoAge. Premium SaaS dashboard with Day and Night modes.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Google Fonts: Inter & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- Ambient Background Glows -->
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+  <div class="ambient-glow ambient-glow-3"></div>
+
+  <!-- Fullscreen Confetti Canvas -->
+  <canvas id="confettiCanvas" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 999;"></canvas>
+
+  <!-- ========================================================================
+       Top Navigation Bar
+       ======================================================================== -->
+  <header class="site-header">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" aria-label="ChronoAge Home">
+        <div class="logo-icon-wrapper">
+          <i class="fa-solid fa-hourglass-half"></i>
+        </div>
+        <span>Chrono<span class="gradient-text">Age</span></span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu" id="navMenu">
+          <li><a href="#calculator" class="nav-link active"><i class="fa-solid fa-calculator"></i> Calculator</a></li>
+          <li><a href="#countdown" class="nav-link"><i class="fa-solid fa-cake-candles"></i> Birthday</a></li>
+          <li><a href="#cosmic" class="nav-link"><i class="fa-solid fa-sun"></i> Zodiac</a></li>
+          <li><a href="#statistics" class="nav-link"><i class="fa-solid fa-chart-line"></i> Life Stats</a></li>
+          <li><a href="#facts" class="nav-link"><i class="fa-solid fa-lightbulb"></i> Fun Facts</a></li>
+          <li><a href="#planetary" class="nav-link"><i class="fa-solid fa-planet-ringed"></i> Planets</a></li>
+          <li><a href="#milestones" class="nav-link"><i class="fa-solid fa-flag-checkered"></i> Milestones</a></li>
+          <li><a href="#comparison" class="nav-link"><i class="fa-solid fa-user-group"></i> Compare</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- Saved Profiles Drawer Trigger -->
+        <button class="btn-nav-action" id="btnOpenProfiles" title="Saved Profiles & History" aria-label="Saved Profiles">
+          <i class="fa-regular fa-bookmark"></i>
+          <span class="btn-label">Profiles</span>
+          <span class="badge-count" id="profilesCountBadge">0</span>
+        </button>
+
+        <!-- Day/Night Mode Switch -->
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Day/Night Mode" aria-label="Toggle Theme">
+          <i class="fa-solid fa-sun sun-icon"></i>
+          <i class="fa-solid fa-moon moon-icon"></i>
+        </button>
+
+        <!-- Mobile Menu Hamburger -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Mobile Navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Main Content Container
+       ======================================================================== -->
+  <main class="container">
+
+    <!-- Hero Header -->
+    <section class="hero-section">
+      <div class="hero-pill">
+        <i class="fa-solid fa-sparkles"></i> The Ultimate Life Timeline & Time Calculator
+      </div>
+      <h1 class="hero-title">
+        Discover Your <span class="gradient-text">True Age</span>
+      </h1>
+      <p class="hero-subtitle">
+        Calculate your chronological age down to the exact second, unveil your cosmic identity, track solar journeys, and monitor upcoming life milestones.
+      </p>
+    </section>
+
+    <!-- ======================================================================
+         1. Main Age Calculator Section
+         ====================================================================== -->
+    <section id="calculator" class="calculator-section section-wrapper">
+      <div class="glass-card calc-card">
+        <div class="calc-form-container">
+          <div class="section-header" style="margin-bottom: 1.5rem;">
+            <h2 class="section-title">Discover Your Age</h2>
+            <p class="section-subtitle">Calculate your age down to the exact day.</p>
+          </div>
+
+          <!-- Primary Date of Birth Row -->
+          <div class="form-row-primary">
+            <div class="input-group">
+              <label for="birthDateInput" class="input-label">
+                <i class="fa-regular fa-calendar-days" style="color: var(--accent-primary);"></i>
+                Date of Birth
+                <span class="input-label-hint">(Select Year, Month, Day)</span>
+              </label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-calendar input-icon-left"></i>
+                <input 
+                  type="date" 
+                  id="birthDateInput" 
+                  class="input-date" 
+                  placeholder="YYYY-MM-DD" 
+                  aria-label="Date of Birth"
+                  required
+                >
+                <button type="button" id="clearDateBtn" class="input-clear-btn" title="Clear Date" aria-label="Clear date">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <button type="button" id="btnCalculate" class="btn-primary-calc">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Calculate My Age
+            </button>
+          </div>
+
+          <!-- Quick Date Helper Chips -->
+          <div class="quick-helpers">
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-right: 0.25rem;">Quick Jumps:</span>
+            <button type="button" class="quick-chip" data-years="18">18 Yrs Ago</button>
+            <button type="button" class="quick-chip" data-years="21">21 Yrs Ago</button>
+            <button type="button" class="quick-chip" data-years="25">25 Yrs Ago</button>
+            <button type="button" class="quick-chip" data-years="30">30 Yrs Ago</button>
+            <button type="button" class="quick-chip" data-years="50">50 Yrs Ago</button>
+          </div>
+
+          <!-- Advanced Options (Time of Birth & Custom Target Date) -->
+          <button type="button" id="toggleAdvancedBtn" class="advanced-options-trigger">
+            <i class="fa-solid fa-sliders"></i> Advanced Options (Birth Time & Target Date)
+          </button>
+
+          <div id="advancedOptionsPanel" class="advanced-options-panel">
+            <div class="input-group">
+              <label for="birthTimeInput" class="input-label">
+                <i class="fa-regular fa-clock" style="color: var(--accent-primary);"></i>
+                Exact Birth Time (Optional)
+              </label>
+              <input type="time" id="birthTimeInput" class="input-date" value="00:00" style="height: 3rem;">
+            </div>
+
+            <div class="input-group">
+              <label for="targetDateInput" class="input-label">
+                <i class="fa-solid fa-bullseye" style="color: var(--accent-primary);"></i>
+                Calculate Age As Of (Optional Target)
+              </label>
+              <input type="date" id="targetDateInput" class="input-date" style="height: 3rem;">
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             Results Area (Years, Months, Days & Breakdowns)
+             ================================================================== -->
+        <div id="resultsContainer" class="results-container">
+          <div class="results-header-tag">
+            <i class="fa-solid fa-sparkles"></i> You Are
+          </div>
+
+          <!-- Primary 3-Pillar Age Grid -->
+          <div class="primary-age-grid">
+            <div class="age-hero-pillar">
+              <div class="pillar-glow"></div>
+              <div class="age-hero-value" id="resYears">0</div>
+              <div class="age-hero-label">Years</div>
+            </div>
+            <div class="age-hero-pillar">
+              <div class="pillar-glow"></div>
+              <div class="age-hero-value" id="resMonths">0</div>
+              <div class="age-hero-label">Months</div>
+            </div>
+            <div class="age-hero-pillar">
+              <div class="pillar-glow"></div>
+              <div class="age-hero-value" id="resDays">0</div>
+              <div class="age-hero-label">Days</div>
+            </div>
+          </div>
+
+          <!-- Action Toolbar for Results -->
+          <div class="results-toolbar">
+            <button type="button" class="btn-tool btn-tool-save" id="btnSaveCurrentProfile">
+              <i class="fa-solid fa-user-plus"></i> Save to Profiles
+            </button>
+            <button type="button" class="btn-tool" id="btnShareResult">
+              <i class="fa-solid fa-share-nodes"></i> Share Result
+            </button>
+            <button type="button" class="btn-tool" id="btnCopyResult">
+              <i class="fa-regular fa-copy"></i> Copy Summary
+            </button>
+            <button type="button" class="btn-tool" id="btnPrintReport">
+              <i class="fa-solid fa-print"></i> Download / Print Report
+            </button>
+            <button type="button" class="btn-tool" id="btnResetCalc" style="color: var(--rose-500);">
+              <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+            </button>
+          </div>
+
+          <!-- Secondary Units Breakdown -->
+          <div class="breakdown-section-title">
+            <i class="fa-solid fa-hourglass-start" style="color: var(--accent-primary);"></i>
+            Complete Lifetime Units Breakdown
+          </div>
+
+          <div class="breakdown-grid">
+            <div class="breakdown-card">
+              <i class="fa-regular fa-calendar-check breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalMonths">0</div>
+              <div class="breakdown-label">Total Months</div>
+            </div>
+
+            <div class="breakdown-card">
+              <i class="fa-solid fa-calendar-week breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalWeeks">0</div>
+              <div class="breakdown-label">Total Weeks</div>
+            </div>
+
+            <div class="breakdown-card">
+              <i class="fa-regular fa-sun breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalDays">0</div>
+              <div class="breakdown-label">Total Days</div>
+            </div>
+
+            <div class="breakdown-card">
+              <i class="fa-regular fa-clock breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalHours">0</div>
+              <div class="breakdown-label">Total Hours</div>
+            </div>
+
+            <div class="breakdown-card">
+              <i class="fa-solid fa-stopwatch breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalMinutes">0</div>
+              <div class="breakdown-label">Total Minutes</div>
+            </div>
+
+            <div class="breakdown-card">
+              <i class="fa-solid fa-bolt-lightning breakdown-icon"></i>
+              <div class="breakdown-value" id="resTotalSeconds">0</div>
+              <div class="breakdown-label">Total Seconds</div>
+              <div class="ticker-badge"><span class="pulse-dot"></span> Live Ticking</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         2. Next Birthday Countdown Section
+         ====================================================================== -->
+    <section id="countdown" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-cake-candles"></i> Annual Milestone</span>
+        <h2 class="section-title">Next Birthday Countdown</h2>
+        <p class="section-subtitle">Watch the seconds tick away as your next solar journey milestone approaches.</p>
+      </div>
+
+      <div class="glass-card countdown-banner-card">
+        <div class="countdown-top-info">
+          <div class="bday-target-date">
+            <i class="fa-regular fa-calendar-star" style="color: var(--accent-primary);"></i>
+            <span id="nextBdayFormatted">Loading date...</span>
+          </div>
+          <div class="bday-weekday-pill" id="nextBdayWeekday">
+            Turns -- on --
+          </div>
+        </div>
+
+        <!-- 4 Countdown Digit Blocks -->
+        <div class="countdown-digits-grid">
+          <div class="countdown-digit-block">
+            <div class="countdown-num" id="countdownDays">0</div>
+            <div class="countdown-label">Days</div>
+          </div>
+          <div class="countdown-digit-block">
+            <div class="countdown-num" id="countdownHours">00</div>
+            <div class="countdown-label">Hours</div>
+          </div>
+          <div class="countdown-digit-block">
+            <div class="countdown-num" id="countdownMinutes">00</div>
+            <div class="countdown-label">Minutes</div>
+          </div>
+          <div class="countdown-digit-block">
+            <div class="countdown-num" id="countdownSeconds">00</div>
+            <div class="countdown-label">Seconds</div>
+          </div>
+        </div>
+
+        <!-- Birthday Cycle Progress Bar -->
+        <div class="countdown-progress-wrap">
+          <div class="progress-labels">
+            <span>Yearly Birthday Cycle Progress</span>
+            <span id="bdayProgressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-bar-fill" id="bdayProgressFill" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Birthday Celebration Today Banner -->
+        <div class="birthday-today-card" id="birthdayTodayCard">
+          <h3 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--amber-500);">
+            🎉 Happy Birthday Today! 🎉
+          </h3>
+          <p style="margin-bottom: 1rem; color: var(--text-primary);">
+            Today marks another magnificent year of your journey! May your day be filled with joy and celebration.
+          </p>
+          <button type="button" class="btn-primary-calc" id="btnCelebrate">
+            <i class="fa-solid fa-champagne-glasses"></i> Celebrate with Confetti!
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. Cosmic Identity & Day of Birth Section
+         ====================================================================== -->
+    <section id="cosmic" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-moon-stars"></i> Astrology & Heritage</span>
+        <h2 class="section-title">Day of Birth & Cosmic Identity</h2>
+        <p class="section-subtitle">The celestial coordinates, seasonal nature, and day of the week you were born.</p>
+      </div>
+
+      <div class="cosmic-grid">
+        <!-- Weekday Card -->
+        <div class="glass-card cosmic-card">
+          <div>
+            <div class="cosmic-header">
+              <div class="cosmic-icon"><i class="fa-solid fa-calendar-day"></i></div>
+              <div>
+                <h3 class="cosmic-title">Birth Weekday</h3>
+                <div class="cosmic-subtitle">Day of the Week</div>
+              </div>
+            </div>
+            <div class="cosmic-body">
+              <div class="cosmic-highlight" id="birthWeekdayTitle">--</div>
+              <div class="cosmic-desc" id="birthWeekdayDesc">--</div>
+            </div>
+          </div>
+          <div class="cosmic-tags">
+            <span class="cosmic-tag"><i class="fa-solid fa-compass"></i> Origin Coordinate</span>
+          </div>
+        </div>
+
+        <!-- Western Zodiac Card -->
+        <div class="glass-card cosmic-card">
+          <div>
+            <div class="cosmic-header">
+              <div class="cosmic-icon"><i class="fa-solid fa-star-of-david"></i></div>
+              <div>
+                <h3 class="cosmic-title">Western Zodiac</h3>
+                <div class="cosmic-subtitle">Solar Constellation</div>
+              </div>
+            </div>
+            <div class="cosmic-body">
+              <div class="cosmic-highlight" style="display: flex; align-items: center; gap: 0.5rem;">
+                <span id="zodiacSymbol" style="color: var(--accent-primary); font-size: 1.8rem;">♈</span>
+                <span id="zodiacSignName">--</span>
+              </div>
+              <div class="cosmic-desc" id="zodiacTrait">--</div>
+            </div>
+          </div>
+          <div class="cosmic-tags">
+            <span class="cosmic-tag" id="zodiacElement">Element: --</span>
+            <span class="cosmic-tag" id="zodiacPlanet">Ruler: --</span>
+          </div>
+        </div>
+
+        <!-- Chinese Zodiac Card -->
+        <div class="glass-card cosmic-card">
+          <div>
+            <div class="cosmic-header">
+              <div class="cosmic-icon"><i class="fa-solid fa-dragon"></i></div>
+              <div>
+                <h3 class="cosmic-title">Chinese Zodiac</h3>
+                <div class="cosmic-subtitle">Lunar Archetype</div>
+              </div>
+            </div>
+            <div class="cosmic-body">
+              <div class="cosmic-highlight" id="chineseAnimalName">--</div>
+              <div class="cosmic-desc" id="chineseTrait">--</div>
+            </div>
+          </div>
+          <div class="cosmic-tags">
+            <span class="cosmic-tag" id="chineseElement">Element: --</span>
+          </div>
+        </div>
+
+        <!-- Birth Season & Stones -->
+        <div class="glass-card cosmic-card">
+          <div>
+            <div class="cosmic-header">
+              <div class="cosmic-icon"><i class="fa-solid fa-gem"></i></div>
+              <div>
+                <h3 class="cosmic-title">Season & Gemstone</h3>
+                <div class="cosmic-subtitle">Birth Nature</div>
+              </div>
+            </div>
+            <div class="cosmic-body">
+              <div class="cosmic-highlight" id="birthSeasonBadge">--</div>
+              <div class="cosmic-desc" id="birthSeasonDesc">--</div>
+            </div>
+          </div>
+          <div class="cosmic-tags">
+            <span class="cosmic-tag">Stone: <strong id="birthstoneName">--</strong></span>
+            <span class="cosmic-tag">Flower: <strong id="birthFlowerName">--</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. Life Statistics & Biological Metrics Section
+         ====================================================================== -->
+    <section id="statistics" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-chart-pie"></i> Quantitative Metrics</span>
+        <h2 class="section-title">Life Statistics</h2>
+        <p class="section-subtitle">Every dimension of your time elapsed on Planet Earth.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-regular fa-sun"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalDays">0</div>
+            <div class="stat-label">Total Days Lived</div>
+            <div class="stat-note">Sunrises & sunsets witnessed</div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-solid fa-calendar-week"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalWeeks">0</div>
+            <div class="stat-label">Total Weeks Lived</div>
+            <div class="stat-note">Complete seven-day cycles</div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-regular fa-moon"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalMonths">0</div>
+            <div class="stat-label">Total Months Lived</div>
+            <div class="stat-note">Full lunar passages</div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-regular fa-clock"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalHours">0</div>
+            <div class="stat-label">Approximate Hours Lived</div>
+            <div class="stat-note">Hours of conscious experience</div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-solid fa-stopwatch"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalMinutes">0</div>
+            <div class="stat-label">Approximate Minutes Lived</div>
+            <div class="stat-note">Countless moments lived</div>
+          </div>
+        </div>
+
+        <div class="glass-card stat-card">
+          <div class="stat-icon-wrap"><i class="fa-solid fa-bolt"></i></div>
+          <div class="stat-content">
+            <div class="stat-value" id="statTotalSeconds">0</div>
+            <div class="stat-label">Approximate Seconds Lived</div>
+            <div class="stat-note">Pulses of spacetime</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Life Expectancy Progress Card -->
+      <div class="glass-card life-expectancy-card">
+        <div class="life-exp-header">
+          <div>
+            <div class="life-exp-title">Life Journey Progress Meter</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              Based on global statistical average life expectancy (~80 years)
+            </div>
+          </div>
+          <div class="life-exp-pct" id="lifeExpPercent">0%</div>
+        </div>
+        <div class="progress-track" style="height: 0.9rem;">
+          <div class="progress-bar-fill" id="lifeExpBar" style="width: 0%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         5. Fun Age Facts & Biological Wonders Section
+         ====================================================================== -->
+    <section id="facts" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-wand-magic"></i> Curiosities</span>
+        <h2 class="section-title">Fun Facts About Your Life</h2>
+        <p class="section-subtitle">Fascinating biological, astronomical, and temporal estimates since your birth.</p>
+      </div>
+
+      <div class="facts-grid">
+        <!-- Heartbeats -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Biological Rhythm</span>
+          <div class="fact-icon-large heart-pulsing"><i class="fa-solid fa-heart-pulse"></i></div>
+          <div class="fact-number" id="factHeartbeats">0</div>
+          <div class="fact-title">Estimated Heartbeats</div>
+          <div class="fact-desc">Your heart has kept a faithful rhythm, pumping oxygen and vitality throughout your body.</div>
+          <div class="fact-disclaimer">*Estimated based on an average resting rate of 80 bpm.</div>
+        </div>
+
+        <!-- Breaths -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Respiration</span>
+          <div class="fact-icon-large" style="color: var(--cyan-500);"><i class="fa-solid fa-wind"></i></div>
+          <div class="fact-number" id="factBreaths">0</div>
+          <div class="fact-title">Estimated Breaths Taken</div>
+          <div class="fact-desc">Inhaling the Earth's atmosphere, fueling millions of living cells with every breath.</div>
+          <div class="fact-disclaimer">*Estimated based on standard 16 breaths per minute.</div>
+        </div>
+
+        <!-- Weekends -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Leisure Time</span>
+          <div class="fact-icon-large" style="color: var(--amber-500);"><i class="fa-solid fa-mug-hot"></i></div>
+          <div class="fact-number" id="factWeekends">0</div>
+          <div class="fact-title">Weekend Days Experienced</div>
+          <div class="fact-desc">Total Saturdays and Sundays you have enjoyed relaxing, exploring, and socializing.</div>
+          <div class="fact-disclaimer">Calculated from actual calendar days elapsed.</div>
+        </div>
+
+        <!-- Sleep Hours -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Dreamland</span>
+          <div class="fact-icon-large" style="color: var(--violet-500);"><i class="fa-solid fa-bed"></i></div>
+          <div class="fact-number" id="factSleepHours">0</div>
+          <div class="fact-title">Hours Spent Sleeping</div>
+          <div class="fact-desc" id="factSleepYears">~0 years spent dreaming</div>
+          <div class="fact-disclaimer">*Estimated assuming healthy 8 hours of sleep per night.</div>
+        </div>
+
+        <!-- Solar Space Travel -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Cosmic Odyssey</span>
+          <div class="fact-icon-large" style="color: var(--primary-500);"><i class="fa-solid fa-shuttle-space"></i></div>
+          <div class="fact-number" id="factSolarDistance">0 km</div>
+          <div class="fact-title">Traveled Around the Sun</div>
+          <div class="fact-desc">As passenger aboard spaceship Earth orbiting at 29.8 km/s through the galaxy.</div>
+          <div class="fact-disclaimer">Calculated using Earth's orbital distance of ~940M km/yr.</div>
+        </div>
+
+        <!-- Blinks -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Reflexes</span>
+          <div class="fact-icon-large" style="color: var(--emerald-500);"><i class="fa-regular fa-eye"></i></div>
+          <div class="fact-number" id="factBlinks">0</div>
+          <div class="fact-title">Estimated Times Blinked</div>
+          <div class="fact-desc">Clearing and safeguarding your vision through thousands of days.</div>
+          <div class="fact-disclaimer">*Estimated at ~15 blinks per waking minute.</div>
+        </div>
+
+        <!-- Meals -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Nourishment</span>
+          <div class="fact-icon-large" style="color: var(--rose-400);"><i class="fa-solid fa-utensils"></i></div>
+          <div class="fact-number" id="factMeals">0</div>
+          <div class="fact-title">Estimated Meals Enjoyed</div>
+          <div class="fact-desc">Nourishing flavors, culinary memories, and gatherings shared with loved ones.</div>
+          <div class="fact-disclaimer">*Estimated based on 3 meals per day.</div>
+        </div>
+
+        <!-- Next Milestone Teaser -->
+        <div class="glass-card fact-card">
+          <span class="fact-badge">Horizon</span>
+          <div class="fact-icon-large" style="color: var(--amber-400);"><i class="fa-solid fa-trophy"></i></div>
+          <div class="fact-number" style="font-size: 1.45rem; line-height: 1.3;" id="factNextMilestone">--</div>
+          <div class="fact-title">Next Major Birthday Milestone</div>
+          <div class="fact-desc">Keep your eyes on the horizon as your next big round decade milestone draws near!</div>
+          <div class="fact-disclaimer">Computed from milestone projections.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         6. Planetary Age Section (Solar System)
+         ====================================================================== -->
+    <section id="planetary" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-planet-ringed"></i> Solar System</span>
+        <h2 class="section-title">Age on Other Planets</h2>
+        <p class="section-subtitle">Planetary orbital periods differ across the solar system. Discover your cosmic age on each planet.</p>
+      </div>
+
+      <div class="planets-grid" id="planetsGrid">
+        <!-- Dynamically populated by planetary-age.js -->
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         7. Life Milestones Section
+         ====================================================================== -->
+    <section id="milestones" class="section-wrapper">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-flag-checkered"></i> Timeline</span>
+        <h2 class="section-title">Life Milestones</h2>
+        <p class="section-subtitle">Track significant round day counts and key birthday milestones across your life.</p>
+      </div>
+
+      <div class="glass-card milestones-card">
+        <!-- Filter Tabs -->
+        <div class="milestones-filter-bar">
+          <button type="button" class="filter-btn active" data-filter="all">All Milestones</button>
+          <button type="button" class="filter-btn" data-filter="achieved">Achieved</button>
+          <button type="button" class="filter-btn" data-filter="upcoming">Upcoming</button>
+        </div>
+
+        <div class="milestones-timeline-grid" id="milestonesGrid">
+          <!-- Dynamically populated by milestones.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         8. Age Comparison Section
+         ====================================================================== -->
+    <section id="comparison" class="section-wrapper comparison-section">
+      <div class="section-header">
+        <span class="section-tag"><i class="fa-solid fa-user-group"></i> Comparative Analytics</span>
+        <h2 class="section-title">Age Comparison</h2>
+        <p class="section-subtitle">Compare two birth dates to see who is older, the exact calendar difference, and shared milestones.</p>
+      </div>
+
+      <div class="glass-card comparison-card">
+        <div class="comparison-inputs-grid">
+          <!-- Person 1 -->
+          <div class="compare-person-box">
+            <div class="compare-person-header">
+              <div class="person-avatar-icon avatar-p1"><i class="fa-solid fa-user"></i></div>
+              <span>Person 1 (e.g., You)</span>
+            </div>
+            <input type="text" id="compPerson1Name" class="input-text-name" placeholder="Name (e.g. Alex)" value="You">
+            <div class="input-group">
+              <label for="compPerson1Date" class="input-label" style="font-size: 0.85rem;">Date of Birth</label>
+              <input type="date" id="compPerson1Date" class="input-date" style="height: 3rem;">
+            </div>
+          </div>
+
+          <!-- VS Badge -->
+          <div class="compare-vs-badge">VS</div>
+
+          <!-- Person 2 -->
+          <div class="compare-person-box">
+            <div class="compare-person-header">
+              <div class="person-avatar-icon avatar-p2"><i class="fa-solid fa-user-group"></i></div>
+              <span>Person 2 (Partner/Friend)</span>
+            </div>
+            <input type="text" id="compPerson2Name" class="input-text-name" placeholder="Name (e.g. Jordan)" value="Friend">
+            <div class="input-group">
+              <label for="compPerson2Date" class="input-label" style="font-size: 0.85rem;">Date of Birth</label>
+              <input type="date" id="compPerson2Date" class="input-date" style="height: 3rem;">
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-bottom: 2rem;">
+          <button type="button" class="btn-primary-calc" id="btnRunCompare">
+            <i class="fa-solid fa-scale-balanced"></i> Compare Ages
+          </button>
+        </div>
+
+        <!-- Comparison Results Panel -->
+        <div class="comparison-results-panel" id="compResultsPanel">
+          <div class="compare-verdict-banner">
+            <h3 class="compare-verdict-title" id="compVerdictTitle">Comparison Verdict</h3>
+            <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;" id="compVerdictDesc">--</p>
+          </div>
+
+          <div class="compare-diff-pills">
+            <div class="compare-pill">
+              <div class="compare-pill-num" id="compDiffYears">0</div>
+              <div class="compare-pill-lbl">Years Diff</div>
+            </div>
+            <div class="compare-pill">
+              <div class="compare-pill-num" id="compDiffMonths">0</div>
+              <div class="compare-pill-lbl">Months Diff</div>
+            </div>
+            <div class="compare-pill">
+              <div class="compare-pill-num" id="compDiffDays">0</div>
+              <div class="compare-pill-lbl">Days Diff</div>
+            </div>
+          </div>
+
+          <div class="breakdown-grid" style="max-width: 700px; margin: 0 auto;">
+            <div class="breakdown-card">
+              <div class="breakdown-value" id="compTotalDays">0</div>
+              <div class="breakdown-label">Total Days Gap</div>
+            </div>
+            <div class="breakdown-card">
+              <div class="breakdown-value" id="compTotalHours">0</div>
+              <div class="breakdown-label">Total Hours Gap</div>
+            </div>
+            <div class="breakdown-card">
+              <div class="breakdown-value" id="compWeekendsDiff">0</div>
+              <div class="breakdown-label">Weekend Days Gap</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================
+       Saved Profiles & History Modal
+       ======================================================================== -->
+  <div class="modal-overlay" id="profilesModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle" style="font-size: 1.35rem; font-weight: 800;">
+          <i class="fa-solid fa-address-book" style="color: var(--accent-primary);"></i> Saved Profiles & History
+        </h3>
+        <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Close Modal">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Add New Profile Form -->
+      <form id="saveProfileForm" style="margin-bottom: 2rem;">
+        <h4 style="font-size: 1rem; margin-bottom: 0.75rem; color: var(--text-primary);">Save Current / New Profile</h4>
+        <div class="profile-input-grid">
+          <input type="text" id="newProfileName" class="input-text-name" placeholder="Profile Name (e.g., Sarah)" style="margin: 0;" required>
+          <select id="newProfileTag" class="input-text-name" style="margin: 0; cursor: pointer;">
+            <option value="Self">Self</option>
+            <option value="Family">Family</option>
+            <option value="Friend">Friend</option>
+            <option value="Partner">Partner</option>
+            <option value="Colleague">Colleague</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary-calc" style="width: 100%; height: 2.8rem; font-size: 0.95rem; margin-top: 0.75rem;">
+          <i class="fa-solid fa-plus"></i> Save Profile
+        </button>
+      </form>
+
+      <!-- Saved Profiles List -->
+      <h4 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+        <i class="fa-regular fa-bookmark"></i> Saved Profiles
+      </h4>
+      <div class="profiles-list" id="savedProfilesList">
+        <!-- Rendered by app.js -->
+      </div>
+
+      <!-- Recent Calculations History -->
+      <h4 style="font-size: 1rem; margin-top: 1.75rem; margin-bottom: 0.5rem; color: var(--text-primary);">
+        <i class="fa-solid fa-clock-rotate-left"></i> Recent Calculations
+      </h4>
+      <div class="profiles-list" id="historyList">
+        <!-- Rendered by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       Toast Notifications Container
+       ======================================================================== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        Chrono<span class="gradient-text">Age</span>
+      </div>
+      <p class="footer-text">
+        Advanced Life Statistics, Precision Chronological Calculations, and Astronomical Time Exploration. All calculations are executed securely and privately directly in your browser.
+      </p>
+      <ul class="footer-links">
+        <li><a href="#calculator" class="footer-link">Age Calculator</a></li>
+        <li><a href="#countdown" class="footer-link">Birthday Countdown</a></li>
+        <li><a href="#cosmic" class="footer-link">Zodiac & Astrological Lore</a></li>
+        <li><a href="#statistics" class="footer-link">Life Statistics</a></li>
+        <li><a href="#planetary" class="footer-link">Planetary Ages</a></li>
+        <li><a href="#milestones" class="footer-link">Life Milestones</a></li>
+        <li><a href="#comparison" class="footer-link">Age Comparison</a></li>
+      </ul>
+      <div class="footer-copy">
+        © 2026 ChronoAge. Crafted with precision for temporal explorers everywhere.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       Scripts (Modular Execution Order)
+       ======================================================================== -->
+  <script src="js/storage.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/statistics.js"></script>
+  <script src="js/planetary-age.js"></script>
+  <script src="js/milestones.js"></script>
+  <script src="js/comparison.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
+
